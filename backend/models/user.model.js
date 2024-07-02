@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
-const userSchema = new Schema({
+const userSchema = new mongoose.Schema({
     fullName:{
         type: String,
         required: true
     },
-    email:{
+    username:{
         type: String,
         required: true,
         unique: true

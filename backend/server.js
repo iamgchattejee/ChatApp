@@ -5,9 +5,17 @@ import connectToMongoDB from './db/connectToMongoDB.js';
 import authRoutes from './routes/auth.routes.js'
 import messageRoutes from './routes/message.routes.js'; 
 import userRoutes from './routes/user.routes.js';
+import cors from 'cors';
 
 const app = express();
 
+
+const corsOptions = {
+    credentials: true,
+    origin: ['http://localhost:3000']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -18,7 +26,7 @@ app.use("/api/auth",authRoutes);
 app.use("/api/messages",messageRoutes);
 app.use("/api/users",userRoutes);
 
-app.listen(PORT, () => {
-    connectToMongoDB;
+app.listen(PORT, async() => {
+    await connectToMongoDB();
     console.log(`Server running on port ${PORT}`);
 });
