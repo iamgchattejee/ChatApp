@@ -1,14 +1,12 @@
 import jwt from 'jsonwebtoken';
 
-const generateTokenAndSetCookie = (userId,res) => {
-    const token = jwt.sign({userId}, process.env.JWT_SECRET, {
-        expiresIn: "15d"
-    });
+const generateTokenAndSetCookie = (res,token) => {
     res.cookie('jwt', token, {
         expires: new Date(Date.now() + 86400000),
         httpOnly: true,
-        sameSite:"strict",
-        secure:process.env.NODE_ENV !== "development"
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === "production",
+        path: '/',
     });
 };
 

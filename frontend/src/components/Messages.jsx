@@ -1,18 +1,35 @@
+import { useEffect, useRef } from "react";
+import useGetMessage from "../hooks/useGetMessage";
+import MessageSkeleton from "./MessageSkeleton";
+import Message from "./Message";
+import useListenMessage from "../hooks/useListenMessage";
 
+const Messages = () => {
+	const { messages, loading } = useGetMessage();
+	useListenMessage();
+	const lastMessageRef = useRef();
 
-export const Messages = () => {
-  return (
-    <div className="chat chat-end p-4">
-      <div className="chat-image avatar">
-        <div className="w-10 rounded-full">
-          <img
-            alt="Tailwind CSS chat bubble component"
-            src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-          />
-        </div>
-      </div>
-      <div className="chat-bubble">I hate you!</div>
-      <time className="text-xs opacity-50">12:46</time>
-    </div>
-  );
+	useEffect(() => {
+		setTimeout(() => {
+			lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+		}, 100);
+	}, [messages]);
+
+	return (
+		<div className='px-4 flex-1 overflow-auto'>
+			{!loading &&
+				messages.length > 0 &&
+				messages.map((message) => (
+					<div key={message._id} ref={lastMessageRef}>
+						<Message message={message} />
+					</div>
+				))}
+
+			{loading && [...Array(3)].map((_, idx) => <MessageSkeleton key={idx} />)}
+			{!loading && messages.length === 0 && (
+				<p className='text-center'>Send a message to start the conversation</p>
+			)}
+		</div>
+	);
 };
+export default Messages;

@@ -5,7 +5,7 @@ import { useAuthContext } from "../context/AuthContext";
 
 export const useSignup = () => {
     const [loading,setLoading] = useState(false);
-    const [authUser,setAuthUser] = useAuthContext();
+    const {authUser,setAuthUser} = useAuthContext();
 
     const signup = async ({fullName,username,password,confirmPassword,gender}) => {
         try{
@@ -22,14 +22,12 @@ export const useSignup = () => {
                 return;
             }
             setLoading(true);
-            const res = await axios.post("http://localhost:5000/api/auth/signup",{fullName,username,password,confirmPassword,gender});
+            const res = await axios.post("http://localhost:5000/api/auth/signup",{fullName,username,password,confirmPassword,gender},{
+                withCredentials: true 
+            });
             const data = res.data;
-            if(data.error){
-                throw new Error(data.error);
-            }
             localStorage.setItem("Bearer",JSON.stringify(data.token));
-            setAuthUser(data);
-            console.log(data);
+            await setAuthUser(data);
         }
         catch(err){
             toast.error(err.message);

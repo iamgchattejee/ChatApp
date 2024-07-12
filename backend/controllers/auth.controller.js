@@ -1,14 +1,12 @@
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
+import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res) => {
   try {
-    
+   
     const { fullName, username, password, confirmPassword, gender } = req.body;
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: "Paswords do not match" });
-    }
 
     const user = await User.findOne({ username });
     if (user) {
@@ -19,8 +17,7 @@ export const signup = async (req, res) => {
 
     const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
     const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
-
-    const newUser = new User({
+    const newUser =  await User.create({
       fullName,
       username,
       password: hashedPassword,
@@ -28,19 +25,23 @@ export const signup = async (req, res) => {
       profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
     });
     if (newUser) {
-      generateTokenAndSetCookie(newUser._id, res);  
-      await newUser.save();
-
+      const userid = newUser._id
+      const token = jwt.sign({userid}, process.env.JWT_SECRET, {
+        expiresIn: "15d"
+      });
+      generateTokenAndSetCookie(res, token);  
       return res.status(201).json({
         _id: newUser._id,
         fullName: newUser.fullName,
         username: newUser.username,
         profilePic: newUser.profilePic,
+        token: token  // add token to response for client side use
       });
     } else {
       return res.status(400).json({ message: "Invalid User Data" });
     }
   } catch (err) {
+    console.log(err);
     return res.status(400).json({
       err: "Internal Server Error",
     });
@@ -50,6 +51,9 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
+    if(!username || !password) {
+      return res.status(400).json({ message: "Please provide both username and password" });
+    }
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(400).json({ message: "User not found" });
@@ -58,12 +62,17 @@ export const login = async (req, res) => {
     if (!isMatch) {
         return res.status(400).json({ message: "Invalid Password" });
     }
-    generateTokenAndSetCookie(user._id, res);
+    const userid = user._id;
+    const token = jwt.sign({userid}, process.env.JWT_SECRET, {
+      expiresIn: "15d"
+    });
+    generateTokenAndSetCookie(res, token);  
     return res.status(200).json({
         _id: user._id,
         fullName: user.fullName,
         username: user.username,
         profilePic: user.profilePic,
+        token: token
     });
  
   } catch (err) {

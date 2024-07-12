@@ -11,7 +11,8 @@ export const protectRoute = async (req,res,next) => {
                     message: "Unauthorized"
                 })
             }
-            req.userId = decoded.userId;
+            req.userId = decoded.userid;
+            //console.log(decoded)
             next();
         }
         else{
