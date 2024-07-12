@@ -11,9 +11,6 @@ import connectToMongoDB from "./db/connectToMongoDB.js";
 import { app, server } from "./socket/socket.js";
 import cors from "cors";
 
-
-
-// CORS configuration for Express
 const corsOptions = {
     origin: "http://localhost:3000",
     methods: ["GET", "POST"],
@@ -23,7 +20,7 @@ app.use(cors(corsOptions))
 
 dotenv.config();
 
-//const __dirname = path.resolve();
+const __dirname = path.resolve();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
@@ -33,11 +30,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
 
-//app.use(express.static(path.join(__dirname, "/frontend/dist")));
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
-// app.get("*", (req, res) => {
-// 	res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
-// });
+app.get("*", (req, res) => {
+res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+});
 
 server.listen(PORT, () => {
 	connectToMongoDB();
