@@ -12,7 +12,7 @@ const useSendMessage = () => {
         try{
             if(!message) return toast.error("Please enter a message");
             if(!selectedConversation) return toast.error("Please select a conversation");
-            const res = await axios.post(`http://localhost:5000/api/messages/send/${selectedConversation._id}`,{message},{
+            const res = await axios.post(`/api/messages/send/${selectedConversation._id}`,{message},{
                 withCredentials:true
             });
             console.log(res.data)

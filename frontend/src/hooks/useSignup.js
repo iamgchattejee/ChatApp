@@ -22,7 +22,7 @@ export const useSignup = () => {
                 return;
             }
             setLoading(true);
-            const res = await axios.post("http://localhost:5000/api/auth/signup",{fullName,username,password,confirmPassword,gender},{
+            const res = await axios.post("/api/auth/signup",{fullName,username,password,confirmPassword,gender},{
                 withCredentials: true 
             });
             const data = res.data;
