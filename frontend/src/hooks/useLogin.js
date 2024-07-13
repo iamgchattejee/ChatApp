@@ -13,7 +13,7 @@ const useLogin = () => {
                 toast.error("Please fill all fields");
                 return;
             }
-            const res = await axios.post("http://localhost:5000/api/auth/login",{username,password},{
+            const res = await axios.post("/api/auth/login",{username,password},{
                 withCredentials: true 
             });
             const data = res.data;

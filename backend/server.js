@@ -12,7 +12,7 @@ import { app, server } from "./socket/socket.js";
 import cors from "cors";
 
 const corsOptions = {
-    origin: "https://chatapp-ufgo.onrender.com/",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     credentials: true
 };
