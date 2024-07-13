@@ -10,7 +10,7 @@ const useGetMessage = () => {
         const getMessage = async () => {
             setLoading(true);
             try{
-                const res = await axios.get(`http://localhost:5000/api/messages/${selectedConversation._id}`,{withCredentials: true});
+                const res = await axios.get(`/api/messages/${selectedConversation._id}`,{withCredentials: true});
                 setMessages(res.data);
             }
             catch(error){

@@ -15,7 +15,7 @@ const Conversations = () => {
         const getConversation = async () => {
             setLoading(true);
             try{
-                const res = await axios.get("http://localhost:5000/api/users",{withCredentials: true});
+                const res = await axios.get("/api/users",{withCredentials: true});
                 const data = await res.data;
 				console.log(data);
                 if(data.error){
