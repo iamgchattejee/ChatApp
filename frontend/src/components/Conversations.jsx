@@ -17,7 +17,6 @@ const Conversations = () => {
             try{
                 const res = await axios.get("/api/users",{withCredentials: true});
                 const data = await res.data;
-				console.log(data);
                 if(data.error){
                     throw new Error(data.error);
                 }
@@ -33,8 +32,6 @@ const Conversations = () => {
         getConversation();
     },[])
 
-
-	//console.log("CONVERSATIONS: "+conversation);
 	return (
 		<div className='py-2 flex flex-col overflow-auto'>
 			{conversation.map((conversation, idx) => (

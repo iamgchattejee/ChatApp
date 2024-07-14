@@ -15,7 +15,6 @@ const useSendMessage = () => {
             const res = await axios.post(`/api/messages/send/${selectedConversation._id}`,{message},{
                 withCredentials:true
             });
-            console.log(res.data)
             setMessages([...messages,res.data]);
         }
         catch(error){

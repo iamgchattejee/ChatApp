@@ -11,7 +11,6 @@ const useGetConversation = () => {
             try{
                 const res = await axios.get("/api/users",{withCredentials: true});
                 const data = await res.data;
-                console.log(data);
                 if(data.error){
                     throw new Error(data.error);
                 }
