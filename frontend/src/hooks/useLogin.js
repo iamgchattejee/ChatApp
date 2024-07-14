@@ -17,7 +17,6 @@ const useLogin = () => {
                 withCredentials: true 
             });
             const data = res.data;
-            console.log(data);
             if (data.message) {
 				throw new Error(data.message);
 			}

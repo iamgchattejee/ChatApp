@@ -26,6 +26,9 @@ export const useSignup = () => {
                 withCredentials: true 
             });
             const data = res.data;
+            if (data.message) {
+				throw new Error(data.message);
+			}
             localStorage.setItem("Bearer",JSON.stringify(data.token));
             await setAuthUser(data);
         }
