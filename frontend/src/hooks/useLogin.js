@@ -17,11 +17,14 @@ const useLogin = () => {
                 withCredentials: true 
             });
             const data = res.data;
+            if (data.error) {
+				throw new Error(data.error);
+			}
             localStorage.setItem("Bearer",JSON.stringify(data.token));
             await setAuthUser(data);
         }
         catch(error){
-            toast.error(error.response.data.message);
+            toast.error(error.message);
             setloading(false);
         }
         finally{
