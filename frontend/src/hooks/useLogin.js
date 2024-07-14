@@ -18,8 +18,8 @@ const useLogin = () => {
             });
             const data = res.data;
             console.log(data);
-            if (data.error) {
-				throw new Error(data.error);
+            if (data.message) {
+				throw new Error(data.message);
 			}
             localStorage.setItem("Bearer",JSON.stringify(data.token));
             await setAuthUser(data);
