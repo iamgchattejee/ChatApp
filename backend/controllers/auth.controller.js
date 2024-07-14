@@ -10,7 +10,7 @@ export const signup = async (req, res) => {
 
     const user = await User.findOne({ username });
     if (user) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ error: "User already exists" });
     }
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
@@ -38,12 +38,12 @@ export const signup = async (req, res) => {
         token: token  // add token to response for client side use
       });
     } else {
-      return res.status(400).json({ message: "Invalid User Data" });
+      return res.status(400).json({ error: "Invalid User Data" });
     }
   } catch (err) {
     console.log(err);
     return res.status(400).json({
-      err: "Internal Server Error",
+      error: "Internal Server Error",
     });
   }
 };
@@ -52,15 +52,15 @@ export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
     if(!username || !password) {
-      return res.status(400).json({ message: "Please provide both username and password" });
+      return res.status(400).json({ error: "Please provide both username and password" });
     }
     const user = await User.findOne({ username });
     if (!user) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(400).json({ error: "User not found" });
     }
     const isMatch = await bcryptjs.compare(password, user.password);
     if (!isMatch) {
-        return res.status(400).json({ message: "Invalid Password" });
+        return res.status(400).json({ error: "Invalid Password" });
     }
     const userid = user._id;
     const token = jwt.sign({userid}, process.env.JWT_SECRET, {
@@ -77,7 +77,7 @@ export const login = async (req, res) => {
  
   } catch (err) {
     return res.status(400).json({
-      err: "Internal Server Error",
+      error: "Internal Server Error",
     });
   }
 };
@@ -90,7 +90,7 @@ export const logout = async (req, res) => {
     });
   } catch (err) {
     return res.status(400).json({
-      err: "Internal Server Error",
+      error: "Internal Server Error",
     });
   }
 };
