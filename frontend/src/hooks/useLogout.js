@@ -12,8 +12,8 @@ const useLogout = () => {
             localStorage.removeItem("Bearer");
             setAuthUser(null);
         }
-        catch(err){
-            toast.error(err.message);
+        catch(error){
+            toast.error(error.message);
         }
         finally{
             setLoading(false);
